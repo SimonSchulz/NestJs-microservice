@@ -10,5 +10,5 @@
     "emitDecoratorMetadata": true
   },
   "exclude": ["node_modules"],
-  "include": ["src/**/*.ts", "ormconfig.ts", "src/tests/mock.js", "src/tests/notification-settings.service.test.ts"]
+  "include": ["src/**/*.ts", "ormconfig.ts", "src/tests/mock.js", "src/tests/notification-settings.service.test.ts", "src/database/factories/card.factory.js"]
 }

@@ -11,12 +11,13 @@ export default
   reconnectInterval: 2000,
   entities: [`src/entity/**/*.ts`],
   migrations: [`src/database/migration/**/*.ts`],
+  seeds: [`src/database/seeds/**/*.ts`],
   cli: {
     entitiesDir: 'src/entity',
     migrationsDir: 'src/database/migration',
   },
     name: 'development',
     database: process.env.POSTGRES_DB || 'node_project',
-    synchronize: false,
+    synchronize: true,
   }
 ;

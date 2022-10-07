@@ -2,20 +2,21 @@ import express, { Application, Router } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import headersMiddleware from '../helpers/headers';
-import ExampleController from '../controllers/example.controller';
+import CreditRoutes from '../credit/credit.routes';
+//import CreditController from '../controllers/credit.controller';
 
 class App {
   public app: Application;
 
   public router: Router;
 
-  public exampleController: ExampleController;
+  public creditRoutes: CreditRoutes;
 
   constructor() {
     this.app = express();
     this.router = express.Router();
     this.set_config();
-    this.exampleController = new ExampleController(this.router);
+    this.creditRoutes = new CreditRoutes(this.router);
   }
 
   private set_config() {

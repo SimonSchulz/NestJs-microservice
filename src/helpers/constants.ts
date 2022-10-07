@@ -14,3 +14,7 @@ export enum OrderStatus {
   REJECTED = 'REJECTED',
   INDIVIDUAL_CONDITIONS = 'INDIVIDUAL_CONDITIONS',
 }
+
+export enum ErrorStatus {
+  SERVER_ERROR = 'INTERNAL_SERVER_ERROR'
+}
