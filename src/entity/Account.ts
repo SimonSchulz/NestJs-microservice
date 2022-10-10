@@ -13,7 +13,7 @@ class Account extends BaseEntity {
   @OneToOne(() => Credit)
   @JoinColumn({ name: 'creditId' })
   creditId: Credit;
-
+ 
   @Column('decimal', { precision: 19, scale: 4 })
   principalDebt: number;
 

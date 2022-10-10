@@ -15,6 +15,10 @@ export enum OrderStatus {
   INDIVIDUAL_CONDITIONS = 'INDIVIDUAL_CONDITIONS',
 }
 
-export enum ErrorStatus {
-  SERVER_ERROR = 'INTERNAL_SERVER_ERROR'
+export enum ErrorMessage {
+  INCORRECT_ID = 'incorrect user id'
 }
+
+export const enum messages {
+  INTERNAL_SERVER_ERROR = 'Internal server error'
+};
