@@ -16,9 +16,6 @@ export enum OrderStatus {
 }
 
 export enum ErrorMessage {
-  INCORRECT_ID = 'incorrect user id'
+  INCORRECT_ID = 'incorrect user id',
+  NOT_FOUND_CARDS = 'Not found credit cards',
 }
-
-export const enum messages {
-  INTERNAL_SERVER_ERROR = 'Internal server error'
-};

@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { ErrorMessage, messages } from '../helpers/constants';
+import { ErrorMessage } from '../helpers/constants';
 import CreditCardService from './credit.service';
 
 
@@ -12,14 +12,15 @@ class CreditController {
 
   public getCreditCardsInfo = async (req: Request, res: Response) => {
     try {
-      const result = await this.creditCardService.getInfoCreditCards(req.query)
+      const { clientId } = req.query;
+      const result = await this.creditCardService.getInfoCreditCards(clientId)
 
       if (!result){
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ exists: ErrorMessage.INCORRECT_ID })
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: ErrorMessage.NOT_FOUND_CARDS })
       }
       return res.status(StatusCodes.OK).json({ cards: result });
     } catch (error) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ exists: messages.INTERNAL_SERVER_ERROR });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
   }
 }
