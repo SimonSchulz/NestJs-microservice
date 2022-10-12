@@ -16,11 +16,11 @@ class CreditController {
       const result = await this.creditCardService.getInfoCreditCards(clientId)
 
       if (!result){
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: ErrorMessage.NOT_FOUND_CARDS })
+        return res.status(StatusCodes.NOT_FOUND).json({ message: ErrorMessage.NOT_FOUND_CARDS })
       }
       return res.status(StatusCodes.OK).json({ cards: result });
     } catch (error) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
+      return res.status(StatusCodes.NOT_FOUND).json({ message: error.message });
     }
   }
 }
