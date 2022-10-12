@@ -14,3 +14,8 @@ export enum OrderStatus {
   REJECTED = 'REJECTED',
   INDIVIDUAL_CONDITIONS = 'INDIVIDUAL_CONDITIONS',
 }
+
+export enum ErrorMessage {
+  INCORRECT_ID = 'incorrect user id',
+  NOT_FOUND_CARDS = 'Not found credit cards',
+}

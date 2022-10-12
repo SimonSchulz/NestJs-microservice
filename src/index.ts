@@ -7,6 +7,7 @@ config();
 
 const appPort = process.env.EXPRESS_PORT;
 
+
 app.listen(appPort, async () => {
   console.log(`Listening on port ${appPort}`);
   createTypeOrmConnection()

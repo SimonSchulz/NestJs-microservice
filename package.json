@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon",
-    "dev": "ts-node-dev --respawn --transpileOnly ./src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
     "prod": "tsc && node ./build/index.js",
     "tsc": "tsc",
     "test": "cross-env NODE_ENV=test jest",
