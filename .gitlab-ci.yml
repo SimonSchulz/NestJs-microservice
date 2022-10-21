@@ -116,7 +116,7 @@ image:dev:
 
 image:prod:
   extends: .image-template
-  tags: [prod]
+  tags: [dev]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 
@@ -130,6 +130,6 @@ deploy:dev:
 
 deploy:prod:
   extends: .deploy-template
-  tags: [prod]
+  tags: [dev]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
