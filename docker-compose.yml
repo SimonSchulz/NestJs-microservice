@@ -15,7 +15,7 @@ services:
       context: .
     image: $AND_DOCKER_REGISTRY_NAME/$PROJECT:$CI_COMMIT_BRANCH
     ports:
-      - 3001:3000
+      - 3001:8080
     restart: always
     logging: *default-logging
     networks:
