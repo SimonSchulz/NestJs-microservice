@@ -10,8 +10,6 @@ variables:
   TRANSFER_METER_FREQUENCY: "2s"
   GIT_DEPTH: 0
 
-
-
 #TEMPLATES
 
 .image-template:
@@ -23,23 +21,20 @@ variables:
     - docker push $AND_DOCKER_REGISTRY_NAME/$PROJECT:$CI_COMMIT_BRANCH
     - docker system prune -f --filter "label!=keep"
 
-
-
 .deploy-template:
   stage: deploy
   before_script:
     - echo "$AND_DOCKER_REGISTRY_RO_PASS" | docker login -u nexus-ro "$AND_DOCKER_REGISTRY_NAME" --password-stdin
+    - cp $AND_ENV .env
   script:
-    - docker compose -f docker-compose.yml stop || true
+    - docker-compose -f docker-compose.yml stop || true
     - docker system prune -f --filter "label!=keep"
-    - docker compose -f docker-compose.yml pull || true
-    - docker compose -f docker-compose.yml up --force-recreate -d
-
-
-
+    - docker-compose -f docker-compose.yml pull || true
+    - docker-compose -f docker-compose.yml up --force-recreate -d
 
 .test-template:
   stage: test
+  image: sonarsource/sonar-scanner-cli:4.6
   variables:
     SONAR_PROJECT_BASE_DIR: "$CI_PROJECT_DIR"
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
@@ -53,7 +48,7 @@ variables:
     - npm install
   script:
     - CI=true && npm run test -- --coverage || true
-    - /home/gitlab-runner/sonar-scanner-4.7.0.2747-linux/bin/sonar-scanner -Dproject.settings=sonar-project.properties
+    - /usr/bin/entrypoint.sh sonar-scanner -Dproject.settings=sonar-project.properties
       -Dsonar.projectKey=$PROJECT-$CI_COMMIT_BRANCH
       -Dsonar.projectName=$PROJECT-$CI_COMMIT_BRANCH
       -Dsonar.projectVersion=1.0
@@ -67,29 +62,17 @@ variables:
       - coverage
   allow_failure: true
   
-
-
-
-
-
-
-
-
-
-
-
-
 #JOBS
 
 test:dev:
   extends: .test-template
-  tags: [dev]
+  tags: [docker-dev]
   rules:
     - if: $CI_COMMIT_BRANCH == "dev"
 
 test:prod:
   extends: .test-template
-  tags: [prod]
+  tags: [docker-dev]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 
@@ -104,9 +87,6 @@ test:mr:
         CI_COMMIT_BRANCH: mr
 
 
-
-
-
 image:dev:
   extends: .image-template
   tags: [dev]
@@ -116,10 +96,9 @@ image:dev:
 
 image:prod:
   extends: .image-template
-  tags: [dev]
+  tags: [shell-$CI_COMMIT_BRANCH]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-
 
 
 deploy:dev:
@@ -130,6 +109,7 @@ deploy:dev:
 
 deploy:prod:
   extends: .deploy-template
-  tags: [dev]
+  tags: [shell-$CI_COMMIT_BRANCH]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
+
