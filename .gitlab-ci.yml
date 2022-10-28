@@ -12,26 +12,6 @@ variables:
 
 #TEMPLATES
 
-.image-template:
-  stage: image 
-  before_script:
-    - echo "$AND_DOCKER_REGISTRY_RW_PASS" | docker login -u nexus "$AND_DOCKER_REGISTRY_NAME" --password-stdin
-  script:
-    - docker build --tag $AND_DOCKER_REGISTRY_NAME/$PROJECT:$CI_COMMIT_BRANCH -f Dockerfile --compress --build-arg BUILDKIT_INLINE_CACHE=1 .
-    - docker push $AND_DOCKER_REGISTRY_NAME/$PROJECT:$CI_COMMIT_BRANCH
-    - docker system prune -f --filter "label!=keep"
-
-.deploy-template:
-  stage: deploy
-  before_script:
-    - echo "$AND_DOCKER_REGISTRY_RO_PASS" | docker login -u nexus-ro "$AND_DOCKER_REGISTRY_NAME" --password-stdin
-    - cp $AND_ENV .env
-  script:
-    - docker-compose -f docker-compose.yml stop || true
-    - docker system prune -f --filter "label!=keep"
-    - docker-compose -f docker-compose.yml pull || true
-    - docker-compose -f docker-compose.yml up --force-recreate -d
-
 .test-template:
   stage: test
   image: sonarsource/sonar-scanner-cli:4.6
@@ -61,54 +41,59 @@ variables:
     paths:
       - coverage
   allow_failure: true
+
+.image-template:
+  stage: image 
+  before_script:
+    - echo "$AND_DOCKER_REGISTRY_RW_PASS" | docker login -u nexus "$AND_DOCKER_REGISTRY_NAME" --password-stdin
+  script:
+    - docker build --tag $AND_DOCKER_REGISTRY_NAME/$PROJECT:$CI_COMMIT_BRANCH -f Dockerfile --compress --build-arg BUILDKIT_INLINE_CACHE=1 .
+    - docker push $AND_DOCKER_REGISTRY_NAME/$PROJECT:$CI_COMMIT_BRANCH
+    - docker system prune -f --filter "label!=keep"
+
+.deploy-template:
+  stage: deploy
+  before_script:
+    - echo "$AND_DOCKER_REGISTRY_RO_PASS" | docker login -u nexus-ro "$AND_DOCKER_REGISTRY_NAME" --password-stdin
+    - cp $AND_ENV .env
+  script:
+    - docker-compose -f docker-compose.yml stop || true
+    - docker system prune -f --filter "label!=keep"
+    - docker-compose -f docker-compose.yml pull || true
+    - docker-compose -f docker-compose.yml up --force-recreate -d
   
 #JOBS
 
-test:dev:
-  extends: .test-template
-  tags: [docker]
-  rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
-
-test:prod:
+test:$CI_COMMIT_BRANCH:
   extends: .test-template
   tags: [docker]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-
-test:mr:
-  extends: .test-template
-  tags:
-    - dev
-    - prod
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      variables:
-        CI_COMMIT_BRANCH: mr
-
-
-image:dev:
-  extends: .image-template
-  tags: [shell-$CI_COMMIT_BRANCH]
-  rules:
     - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "test"
 
-
-image:prod:
+image:$CI_COMMIT_BRANCH:
   extends: .image-template
   tags: [shell-$CI_COMMIT_BRANCH]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-
-
-deploy:dev:
-  extends: .deploy-template
-  tags: [shell-$CI_COMMIT_BRANCH]
-  rules:
     - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "test"
 
-deploy:prod:
+deploy:$CI_COMMIT_BRANCH:
   extends: .deploy-template
   tags: [shell-$CI_COMMIT_BRANCH]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "test"
+
+# test:mr:
+#   extends: .test-template
+#   tags:
+#     - shell-dev
+#     - shell-main
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#       variables:
+#         CI_COMMIT_BRANCH: mr
