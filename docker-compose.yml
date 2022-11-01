@@ -8,6 +8,18 @@ x-logging: &default-logging
    driver: json-file
 
 services:
+  postgres:
+    image: 'postgres:12.2'
+    container_name: postgres_$PROJECT
+    env_file:
+      - .env
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres_credit:/var/lib/postgresql/data
+    networks:
+      - nodanorm_new
+
 
   front:
     container_name: $PROJECT
@@ -21,6 +33,10 @@ services:
     networks:
       - nodanorm_new
 
+volumes:
+  postgres_credit:
+    #- /var/lib/postgresql/data
+    
 networks:
   nodanorm_new:
     driver: bridge
