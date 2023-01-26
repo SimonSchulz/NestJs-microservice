@@ -1,18 +1,12 @@
 version: "3.4"
 
-x-logging: &default-logging
-   options:
-      max-size: "10m"
-      max-file: "4"
-      tag: "{{.ImageName}}|{{.Name}}"
-   driver: json-file
 
 services:
   postgres:
     image: 'postgres:12.2'
     container_name: postgres_$PROJECT
-    env_file:
-      - .env
+    env_file: $AND_ENV
+    restart: always
     ports:
       - 5433:5432
     volumes:
@@ -21,21 +15,24 @@ services:
       - nodanorm_new
 
 
-  front:
+  credit-service:
     container_name: $PROJECT
-    build:
-      context: .
     image: $AND_DOCKER_REGISTRY_NAME/$PROJECT:$CI_COMMIT_BRANCH
     ports:
-      - 3001:8080
+      - $PORT:8080
     restart: always
-    logging: *default-logging
+    env_file: $AND_ENV
+    logging:
+      driver: loki
+      options:
+        loki-url: http://127.0.0.1:3100/loki/api/v1/push
+        max-size: 300m
     networks:
       - nodanorm_new
 
 volumes:
   postgres_credit:
-    #- /var/lib/postgresql/data
+
     
 networks:
   nodanorm_new:
