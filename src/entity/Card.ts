@@ -1,45 +1,45 @@
-import { Column, PrimaryColumn, ManyToOne, Entity } from 'typeorm';
-import { CardStatus } from '../helpers/constants';
+import { Column, PrimaryColumn, ManyToOne, Entity, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
+import { CardStatus, CardType, PaymentSystem } from '../helpers/constants';
 import Account from './Account';
 import BaseEntity from './BaseEntity';
 
 @Entity()
 class Card extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id: string;
+
+  @Column()
   cardNumber: string;
 
-  @ManyToOne(() => Account, (account) => account.cards)
-  accountNumber: Account;
+  @Column()
+  cardName: string;
+
+  @OneToMany(() => Account, (account) => account.card)
+  accountNumbers: Account[];
 
   @Column({ length: 50 })
   holderName: string;
 
+  @Column({ type: 'enum', enum: CardType })
+  type: CardType;
+
   @Column()
   expirationDate: Date;
 
-  @Column({ length: 30 })
-  paymentSystem: string;
-
-  @Column('decimal', { precision: 19, scale: 4 })
-  balance: number;
-
-  @Column('decimal', { precision: 19, scale: 4 })
-  transactionLimit: number;
+  @Column({ type: 'enum', enum: PaymentSystem })
+  paymentSystem: PaymentSystem;
 
   @Column({ type: 'enum', enum: CardStatus })
   status: CardStatus;
 
-  @Column({ length: 30 })
-  deliveryPoint: string;
-
-  @Column({ length: 30 })
-  coBrand: string;
+  @Column('decimal', { precision: 19, scale: 4 })
+  transactionLimit: number;
 
   @Column()
-  isDigitalWallet: boolean;
+  isVirtual: boolean;
 
   @Column()
-  isDigital: boolean;
+  cardColor: string;
 }
 
 export default Card;

@@ -13,7 +13,7 @@ class CreditController {
   public getCreditCardsInfo = async (req: Request, res: Response) => {
     try {
       const { clientId } = req.query;
-      const result = await this.creditCardService.getInfoCreditCards(clientId)
+      const result = await this.creditCardService.getAccountsWithCreditCards(clientId)
 
       if (!result){
         return res.status(StatusCodes.NOT_FOUND).json({ message: ErrorMessage.NOT_FOUND_CARDS })
