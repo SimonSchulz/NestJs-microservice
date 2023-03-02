@@ -14,7 +14,6 @@ class CreditRoutes {
 
   public routes() {
      this.router.get('/credit-cards', this.creditController.getCreditCardsInfo)
-     
   }
 }
 
