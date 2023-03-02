@@ -25,7 +25,7 @@ class App {
     this.app.use(cors());
     this.app.use(headersMiddleware);
     this.app.use(express.static('static'));
-    this.app.use(this.router);
+    this.app.use('/api/v1', this.router);
   }
 }
 

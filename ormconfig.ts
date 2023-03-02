@@ -1,9 +1,8 @@
-import { ConnectionOptions } from 'typeorm';
-
-export default {
-  type: 'postgres',
+export default 
+  {
+    type: 'postgres',
   host: process.env.POSTGRES_HOST,
-  port: process.env.POSTGRES_PORT ? parseInt(process.env.POSTGRES_PORT, 10) : 5432,
+  port: process.env.POSTGRES_PORT ? parseInt(process.env.POSTGRES_PORT) : 5432,
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD || 'postgres',
   logging: false,
@@ -17,9 +16,8 @@ export default {
     entitiesDir: 'src/entity',
     migrationsDir: 'src/database/migration',
   },
-  name: 'development',
-  database: process.env.POSTGRES_DB || 'node_project',
-  migrationsRun: true,
-  synchronize: true,
-  dropSchema: false,
-} as ConnectionOptions;
+    name: 'development',
+    database: process.env.POSTGRES_DB || 'node_project',
+    synchronize: true,
+  }
+;
