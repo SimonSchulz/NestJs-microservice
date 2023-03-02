@@ -13,8 +13,7 @@
     "migration:generate": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:generate -n ",
     "migration:run": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run -c ",
     "migration:revert": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:revert -c ",
-    "seed:run": "ts-node --transpile-only ./node_modules/typeorm-seeding/dist/cli.js seed -s -c ",
-    "schema:drop": "ts-node --transpile-only ./node_modules/typeorm/cli.js schema:drop -c "
+    "seed:run": "ts-node --transpile-only ./node_modules/typeorm-seeding/dist/cli.js seed -s -c "
   },
   "repository": {
     "type": "git",

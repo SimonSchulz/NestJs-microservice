@@ -1,4 +1,4 @@
-import { Column, OneToOne, JoinColumn, OneToMany, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Column, OneToOne, JoinColumn, OneToMany, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import BaseEntity from './BaseEntity';
 import Credit from './Credit';
 import PaymentSchedule from './PaymentSchedule';
@@ -9,9 +9,6 @@ import Card from './Card';
 class Account extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: string;
-
-  @Column()
-  clientId: string;
 
   @OneToOne(() => Credit)
   @JoinColumn({ name: 'creditId' })
@@ -35,12 +32,6 @@ class Account extends BaseEntity {
   @Column()
   closingDate: Date;
 
-  @Column()
-  isMainAccount: boolean;
-
-  @Column('decimal', { precision: 19, scale: 4 })
-  balance: number;
-
   @Column({ length: 3 })
   currencyCode: string;
 
@@ -53,8 +44,8 @@ class Account extends BaseEntity {
   @OneToMany(() => Operation, (operation) => operation.accounNumber)
   operations: Operation[];
 
-  @ManyToOne(() => Card, (card) => card.accountNumbers)
-  card: Card;
+  @OneToMany(() => Card, (card) => card.accountNumber)
+  cards: Card[];
 }
 
 export default Account;
