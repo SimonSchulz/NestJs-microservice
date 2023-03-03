@@ -17,7 +17,7 @@ export default {
     entitiesDir: 'src/entity',
     migrationsDir: 'src/database/migration',
   },
-  name: 'development',
+  name: 'default',
   database: process.env.POSTGRES_DB || 'node_project',
   migrationsRun: true,
   synchronize: true,

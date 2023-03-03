@@ -3,11 +3,6 @@ export enum CalculationMode {
   ANNUITY = 'ANNUITY',
 }
 
-export enum CardType {
-  CREDIT = 'CREDIT',
-  DEBIT = 'DEBIT'
-}
-
 export enum PaymentSystem {
   MAESTRO = 'MAESTRO',
   VISA = 'VISA',

@@ -6,7 +6,7 @@ POSTGRES_PASSWORD=user
 POSTGRES_DB=Credit
 POSTGRES_PORT=5432
 POSTGRES_HOST=localhost
-NODE_ENV=development
+NODE_ENV=default
 
 > * npm install -g **ts-node**
 > * npm install
