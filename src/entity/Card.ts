@@ -1,5 +1,5 @@
 import { Column, PrimaryColumn, ManyToOne, Entity, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
-import { CardStatus, CardType, PaymentSystem } from '../helpers/constants';
+import { CardStatus, PaymentSystem } from '../helpers/constants';
 import Account from './Account';
 import BaseEntity from './BaseEntity';
 
@@ -19,9 +19,6 @@ class Card extends BaseEntity {
 
   @Column({ length: 50 })
   holderName: string;
-
-  @Column({ type: 'enum', enum: CardType })
-  type: CardType;
 
   @Column()
   expirationDate: Date;
